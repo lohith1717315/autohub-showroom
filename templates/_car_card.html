@@ -1,0 +1,2 @@
+<article class="car-card"><div class="car-image"><span class="used-tag">PRE-OWNED</span><img src="{{ car.image_url }}" alt="{{ car.name }}" loading="lazy"><span class="car-year">{{ car.year }}</span></div><div class="car-info"><div class="car-title-row"><h3>{{ car.name }}</h3><strong>₹{{ '{:,.0f}'.format(car.price) }}</strong></div><p class="car-specs">{{ car.fuel }} <span>·</span> {{ car.transmission }}</p><p class="car-description">{{ car.description }}</p><a class="car-contact" href="{{ url_for('register') }}">Ask us about this car <span>→</span></a></div></article>
+
