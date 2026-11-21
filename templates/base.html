@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>{% block title %}{{ showroom }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">A</span><span>Auto<span class="brand-accent">Hub</span><small>SHOWROOM</small></span></a>
+      <div class="nav-links">
+        <a href="{{ url_for('cars') }}">Buy a car</a>
+        <a href="{{ url_for('sell_car') }}">Sell your car</a>
+        <a class="nav-button" href="{{ url_for('book_service') }}">Book a service</a>
+        {% if current_user %}<span class="nav-user">Hi, {{ current_user.name.split()[0] }}</span><form class="nav-inline" method="post" action="{{ url_for('logout') }}"><button class="nav-plain" type="submit">Sign out</button></form>{% else %}<a href="{{ url_for('login') }}">Sign in</a>{% endif %}
+      </div>
+    </nav>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="container messages" aria-live="polite">{% for category, message in messages %}<div class="notice notice-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer"><div class="container footer-inner"><a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark">A</span><span>Auto<span class="brand-accent">Hub</span><small>SHOWROOM</small></span></a><p>Good cars. Honest service. One friendly showroom.</p><a class="admin-link" href="{{ url_for('admin_dashboard') }}">Admin</a><span>© 2026 AutoHub Showroom</span></div></footer>
+</body>
+</html>
+
