@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102a43">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}">
   <title>{% block title %}{{ showroom }}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -26,6 +30,36 @@
     {% block content %}{% endblock %}
   </main>
   <footer class="footer"><div class="container footer-inner"><a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark">A</span><span>Auto<span class="brand-accent">Hub</span><small>SHOWROOM</small></span></a><p>Good cars. Honest service. One friendly showroom.</p><a class="admin-link" href="{{ url_for('admin_dashboard') }}">Admin</a><span>© 2026 AutoHub Showroom</span></div></footer>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js").catch(() => {}));
+    }
+    let autoHubInstallPrompt;
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      autoHubInstallPrompt = event;
+    });
+    window.addEventListener("appinstalled", () => {
+      const button = document.getElementById("install-app");
+      if (button) { button.textContent = "AutoHub installed"; button.disabled = true; }
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.getElementById("install-app");
+      const help = document.getElementById("install-help");
+      if (!button || !help) return;
+      button.addEventListener("click", async () => {
+        if (autoHubInstallPrompt) {
+          autoHubInstallPrompt.prompt();
+          await autoHubInstallPrompt.userChoice;
+          autoHubInstallPrompt = null;
+          return;
+        }
+        help.hidden = false;
+        help.textContent = /iphone|ipad|ipod/i.test(navigator.userAgent)
+          ? "On iPhone or iPad: tap Share, then Add to Home Screen."
+          : "Open your browser menu (⋮) and choose Install app or Add to Home screen.";
+      });
+    });
+  </script>
 </body>
 </html>
-

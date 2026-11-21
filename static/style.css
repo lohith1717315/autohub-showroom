@@ -32,3 +32,11 @@
   .nav-button{display:inline-block!important}
 }
 
+.install-prompt{padding:18px 0;border-bottom:1px solid var(--line);background:#fff}
+.install-inner{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.install-inner strong{font-family:var(--display);font-size:15px}
+.install-inner p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.install-inner .install-help{margin-top:8px;color:var(--navy);font-weight:600}
+.install-help[hidden]{display:none}
+.install-inner button:disabled{cursor:default;opacity:.7}
+@media(max-width:480px){.install-inner{align-items:flex-start;flex-direction:column}.install-inner .button{align-self:flex-start}}

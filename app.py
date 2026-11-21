@@ -10,7 +10,7 @@ from email.message import EmailMessage
 from functools import wraps
 from pathlib import Path
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from dotenv import load_dotenv
 
@@ -38,6 +38,14 @@ WHATSAPP_TO = "".join(character for character in os.environ.get("AUTOHUB_WHATSAP
 WHATSAPP_TEMPLATE = os.environ.get("AUTOHUB_WHATSAPP_TEMPLATE", "autohub_notification")
 WHATSAPP_LANGUAGE = os.environ.get("AUTOHUB_WHATSAPP_LANGUAGE", "en_US")
 META_GRAPH_API_VERSION = os.environ.get("AUTOHUB_META_GRAPH_API_VERSION", "v27.0")
+
+
+@app.route("/service-worker.js")
+def service_worker():
+    response = send_from_directory(app.static_folder, "service-worker.js", mimetype="application/javascript")
+    response.headers["Service-Worker-Allowed"] = "/"
+    response.headers["Cache-Control"] = "no-cache"
+    return response
 
 SAMPLE_CARS = [
     ("Maruti Suzuki Baleno", 2022, 720000, "Petrol", "Manual", "A comfortable, fuel-efficient hatchback for everyday drives.", "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=85"),
@@ -397,4 +405,3 @@ def admin_dashboard():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=os.environ.get("FLASK_DEBUG") == "1")
-
